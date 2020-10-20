@@ -1,62 +1,68 @@
 #include "sort.h"
 
+void quick_sort(int *array, size_t size);
 void sort_part(int *arr, size_t size, size_t i_low, size_t pivot);
 
 /**
- * refac - function to refactor for betty warnings
+ * partition - sorts the partitions
  * @arr: array
  * @size: array size
- * @i_low: i_low
- * @pivot: pivot
- * @i: i
+ * @i_low: index low
+ * @i_hight: index hight
  *
- * Return: na
+ * Return: pivot
 */
-void refac(int *arr, size_t size, size_t *i_low, size_t *pivot, size_t *i)
+size_t partition(int *arr, size_t size, size_t i_low, size_t i_hight)
 {
-	size_t save_i = 0, j;
 	int temp = 0;
+	size_t save_i = 0, i, j, sort = 1;
 
-	save_i = *i;
-	for (j = *i + 1; j <= *pivot; j++)
+	for (i = i_low; i <= i_hight; i++)
 	{
-		if (arr[j] < arr[*pivot] || j == *pivot)
+		if (arr[i] > arr[i_hight])
 		{
-			/* if equals numbers no swap */
-			/* two checkers when there are repeat numbers */
-			if (arr[j] != arr[save_i])
+			save_i = i;
+			for (j = i + 1; j < i_hight; j++)
 			{
-				temp = arr[save_i];
-				arr[save_i] = arr[j];
-				arr[j] = temp;
-				print_array(arr, size);
-				if (j == *pivot)
+				if (arr[j] < arr[i_hight])
 				{
-					if (save_i == *i_low)
-						(*i_low)++;
-					if (*pivot == 0)
-						return;
-					sort_part(arr, size, *i_low, *pivot);
+					temp = arr[j];
+					arr[j] = arr[save_i];
+					arr[save_i] = temp;
+					print_array(arr, size);
+					save_i++;
 				}
-				save_i++;
 			}
+			temp = arr[i_hight];
+			arr[i_hight] = arr[save_i];
+			arr[save_i] = temp;
+			print_array(arr, size);
+			return (save_i);
 		}
 	}
+	for (i = 0; i < size - 1; i++)
+	{
+		if (arr[i] <= arr[i + 1])
+			sort++;
+	}
+	if (sort == size)
+		return (0);
+	sort_part(arr, size, i_low, i_hight - 1);
+	return (0);
 }
 
 /**
  * sort_part - sorts a number list in recursive mode
  * @arr: the array with number to sort
  * @size: the size of the array
- * @i_low: the index where go to start te comparations
- * @pivot: the number of pivot
+ * @i_low: index low
+ * @i_hight: index hight
  *
  * Return: na
 */
-void sort_part(int *arr, size_t size, size_t i_low, size_t pivot)
+void sort_part(int *arr, size_t size, size_t i_low, size_t i_hight)
 {
-	size_t i;
-	size_t sort = 1;
+	size_t pivot = 0, sort = 1, i;
 
 	for (i = 0; i < size - 1; i++)
 	{
@@ -66,16 +72,26 @@ void sort_part(int *arr, size_t size, size_t i_low, size_t pivot)
 	if (sort == size)
 		return;
 
-	for (i = i_low; i <= pivot; i++)
+	if (i_low < i_hight)
 	{
-		if (arr[i] >= arr[pivot])
+		pivot = partition(arr, size, i_low, i_hight);
+		if (i_low < pivot)
 		{
-			refac(arr, size, &i_low, &pivot, &i);
+			sort_part(arr, size, i_low, pivot - 1);
+		}
+		else
+		{
+			sort_part(arr, size, pivot + 1, i_hight);
+			for (i = 0; i < size - 1; i++)
+			{
+				if (arr[i] <= arr[i + 1])
+					sort++;
+			}
+			if (sort == size)
+				return;
+			sort_part(arr, size, 0, size - 1);
 		}
 	}
-	/* pivot must be equal to i_low for the array is sorted */
-	if (pivot != i_low)
-		sort_part(arr, size, i_low, pivot - 1);
 }
 
 /**
