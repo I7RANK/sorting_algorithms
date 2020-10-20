@@ -34,8 +34,6 @@ void refac(int *arr, size_t size, size_t *i_low, size_t *pivot, size_t *i)
 				{
 					if (save_i == *i_low)
 						(*i_low)++;
-					else
-						(*pivot)--;
 					if (*pivot == 0)
 						return;
 					sort_part(arr, size, *i_low, *pivot);
@@ -58,6 +56,15 @@ void refac(int *arr, size_t size, size_t *i_low, size_t *pivot, size_t *i)
 void sort_part(int *arr, size_t size, size_t i_low, size_t pivot)
 {
 	size_t i;
+	size_t sort = 1;
+
+	for (i = 0; i < size - 1; i++)
+	{
+		if (arr[i] <= arr[i + 1])
+			sort++;
+	}
+	if (sort == size)
+		return;
 
 	for (i = i_low; i <= pivot; i++)
 	{
