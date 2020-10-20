@@ -23,24 +23,25 @@ void refac(int *arr, size_t size, size_t *i_low, size_t *pivot, size_t *i)
 		if (arr[j] < arr[*pivot] || j == *pivot)
 		{
 			/* if equals numbers no swap */
+			/* two checkers when there are repeat numbers */
 			if (arr[j] != arr[save_i])
 			{
 				temp = arr[save_i];
 				arr[save_i] = arr[j];
 				arr[j] = temp;
 				print_array(arr, size);
+				if (j == *pivot)
+				{
+					if (save_i == *i_low)
+						(*i_low)++;
+					else
+						(*pivot)--;
+					if (*pivot == 0)
+						return;
+					sort_part(arr, size, *i_low, *pivot);
+				}
+				save_i++;
 			}
-			if (j == *pivot)
-			{
-				if (save_i == *i_low)
-					(*i_low)++;
-				else
-					(*pivot)--;
-				if (*pivot == 0)
-					return;
-				sort_part(arr, size, *i_low, *pivot);
-			}
-			save_i++;
 		}
 	}
 }
