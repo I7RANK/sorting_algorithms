@@ -15,7 +15,10 @@ size_t knuth_sequence(size_t n)
 	{
 		i = i * 3 + 1;
 	}
-	return (i / 3);
+	i = i / 3;
+	if (i == 0)
+		return (1);
+	return (i);
 }
 
 /**
@@ -37,8 +40,6 @@ int if_swap(int *array, size_t size, size_t *inter, int no_swap)
 			return (1);
 		}
 		*inter = knuth_sequence(*inter);
-		if (*inter == 0)
-			*inter = 1;
 	}
 
 	return (0);
