@@ -1,5 +1,4 @@
 #include "sort.h"
-#include <unistd.h>
 
 /**
  * knuth_sequence - find the number greater and less than @size
